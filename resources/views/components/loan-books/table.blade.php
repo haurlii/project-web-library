@@ -1,7 +1,6 @@
 {{-- Success Flash Message --}}
 @if (Session::has("message"))
-<div x-data="{isFlashMessageSuccess: true}" x-effect="setTimeout(() => isFlashMessageSuccess = false, 3000)"
-    x-show="isFlashMessageSuccess"
+<div x-data="{isFlashMessageSuccess: true}" x-show="isFlashMessageSuccess"
     class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999" style="display: none;">
     <div class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"></div>
     <div @click.outside="isFlashMessageSuccess = false"
@@ -49,8 +48,7 @@
 
 {{-- Error Flash Message --}}
 @if (Session::has("error"))
-<div x-data="{isFlashMessageError: true}" x-effect="setTimeout(() => isFlashMessageError = false, 3000)"
-    x-show="isFlashMessageError"
+<div x-data="{isFlashMessageError: true}" x-show="isFlashMessageError"
     class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999" style="">
     <div class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"></div>
     <div @click.outside="isFlashMessageError = false"
@@ -240,7 +238,7 @@
                 <div data-modal-target="returnBookModal-{{ $loan->id }}"
                     data-modal-toggle="returnBookModal-{{ $loan->id }}"
                     class="modal-close-btn fixed inset-0 h-full w-full bg-gray-300/50 backdrop-blur-[3rem]"></div>
-                <div class="relative w-full max-w-[960px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10">
+                <div class="relative w-full max-w-[584px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10">
                     <!-- close btn -->
                     <button data-modal-target="returnBookModal-{{ $loan->id }}"
                         data-modal-toggle="returnBookModal-{{ $loan->id }}"
@@ -275,7 +273,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-span-1 sm:col-span-3">
+                            <div class="col-span-1 sm:col-span-6">
                                 <label for="user_id"
                                     class=" mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     User Name
@@ -290,7 +288,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-span-1 sm:col-span-3">
+                            <div class="col-span-1 sm:col-span-6">
                                 <label for="title"
                                     class=" mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Book Title
@@ -304,7 +302,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-span-1 sm:col-span-3">
+                            <div class="col-span-1 sm:col-span-6">
                                 <label for="return_date_{{ $loan->id }}"
                                     class=" mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Return Date
@@ -325,7 +323,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-span-1 sm:col-span-3">
+                            {{-- <div class="col-span-1 sm:col-span-3">
                                 <label for="condition"
                                     class=" mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Book Condition
@@ -373,7 +371,7 @@
                                 @error('notes')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
 
                         <div class="flex items-center justify-end w-full gap-3 mt-6">

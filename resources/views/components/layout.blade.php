@@ -56,8 +56,8 @@
             <!-- ===== Content Area End ===== -->
         </div>
         <!-- ===== Page Wrapper End ===== -->
-        @vite('resources/js/app.js')
         @stack('scripts')
+        @vite('resources/js/app.js')
     </body>
 
 </html>

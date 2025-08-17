@@ -7,6 +7,14 @@
         <x-breadcrumb>{{ $title }}</x-breadcrumb>
         <!-- Breadcrumb End -->
 
+        <div class="grid grid-cols-12 gap-4 md:gap-6">
+            <div class="col-span-12 space-y-6 xl:col-span-12">
+                <!-- Metric Group One -->
+                <x-dashboard.grid-info :user="$user" :book="$book" :loan="$loan" :return="$return" />
+                <!-- Metric Group One -->
+            </div>
+        </div>
+
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg">
             <x-books.search-and-add-data :books="$books" :authors="$authors" :publishers="$publishers"
                 :categories="$categories" />
@@ -15,24 +23,5 @@
         </div>
     </div>
     @push('scripts')
-    <script>
-        document.querySelectorAll('input[type="file"][data-preview-target]').forEach(function (input) {
-        input.addEventListener('change', function (e) {
-            const previewId = input.getAttribute('data-preview-target');
-            const preview = document.getElementById(previewId);
-            const file = e.target.files[0];
-
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    });
-
-    </script>
-
     @endpush
 </x-layout>

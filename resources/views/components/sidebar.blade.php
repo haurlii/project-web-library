@@ -37,6 +37,7 @@
 
                 <ul class="flex flex-col gap-4 mb-6">
 
+
                     <!-- Menu Item Dashboard -->
                     <li>
                         <a href="/dashboard" @click="selected = (selected === 'Dashboard' ? '':'Dashboard')"
@@ -56,6 +57,7 @@
                         </a>
                     </li>
                     <!-- Menu Item Dashboard -->
+
 
                     <!-- Menu Item Author -->
                     <li>
@@ -137,7 +139,8 @@
                     </li>
                     <!-- Menu Item Book -->
 
-                    <!-- Menu Item Book -->
+
+                    <!-- Menu Item stock Book -->
                     <li>
                         <a href="/stock-books" @click="selected = (selected === 'Stok Buku' ? '':'Stok Buku')"
                             class="menu-item group hover:menu-item-active hover:menu-item-icon-active"
@@ -157,7 +160,7 @@
                     </li>
                     <!-- Menu Item Book -->
 
-                    <!-- Menu Item Book -->
+                    <!-- Menu Item loan Book -->
                     <li>
                         <a href="/loan-books"
                             @click="selected = (selected === 'Peminjaman Buku' ? '':'Peminjaman Buku')"
@@ -178,7 +181,7 @@
                     </li>
                     <!-- Menu Item Book -->
 
-                    <!-- Menu Item Book -->
+                    <!-- Menu Item return Book -->
                     <li>
                         <a href="/return-books"
                             @click="selected = (selected === 'Pengembalian Buku' ? '':'Pengembalian Buku')"
@@ -199,7 +202,8 @@
                     </li>
                     <!-- Menu Item Book -->
 
-                    <!-- Menu Item Book -->
+
+                    <!-- Menu Item fine set Book -->
                     <li>
                         <a href="/fine-settings"
                             @click="selected = (selected === 'Pengaturan Denda' ? '':'Pengaturan Denda')"
@@ -220,7 +224,7 @@
                     </li>
                     <!-- Menu Item Book -->
 
-                    <!-- Menu Item Profile -->
+                    <!-- Menu Item user Profile -->
                     <li>
                         <a href="/users" @click="selected = (selected === 'Pengguna' ? '':'Pengguna')"
                             class="menu-item group hover:menu-item-active hover:menu-item-icon-active"

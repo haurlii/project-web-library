@@ -87,7 +87,7 @@ class LoanBookController extends Controller
             'loan' => $stock_loan,
         ]);
 
-        return redirect('/loan-books')->with(['message' => 'Success Add Data Loan Book']);
+        return redirect('/loan-books')->with(['message' => 'Success Loan Book']);
     }
 
     /**

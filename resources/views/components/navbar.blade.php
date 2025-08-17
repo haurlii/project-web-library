@@ -106,7 +106,7 @@
                         <img src="{{ asset('assets/images/user/owner.jpg') }}" alt="User" />
                     </span>
 
-                    <span class="text-sm mr-1 block font-medium"> Musharof </span>
+                    <span class="text-sm mr-1 block font-medium"> Ahmad Ashyam Amarullah </span>
 
                     <svg :class="dropdownOpen && 'rotate-180'" class="stroke-gray-500 dark:stroke-gray-400" width="18"
                         height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">

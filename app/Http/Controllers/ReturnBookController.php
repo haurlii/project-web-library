@@ -97,77 +97,77 @@ class ReturnBookController extends Controller
             'status' => $returnBook['status'],
         ]);
 
-        //  Data loan
-        $loan = LoanBook::where('id', $return->id)->first();
-        // Harga buku
-        $price_book = $loan->book->price;
-        // Date
-        $due_date = Carbon::parse($loan->due_date->format('Y-m-d'));
-        $return_date = Carbon::parse($loan->returnBook->return_date->format('Y-m-d'));
+        // //  Data loan
+        // $loan = LoanBook::where('id', $return->id)->first();
+        // // Harga buku
+        // $price_book = $loan->book->price;
+        // // Date
+        // $due_date = Carbon::parse($loan->due_date->format('Y-m-d'));
+        // $return_date = Carbon::parse($loan->returnBook->return_date->format('Y-m-d'));
 
-        // Fine Setting
-        $fine = FineSetting::first();
-        $late_fee_per_day = $fine->late_fee_per_day;
+        // // Fine Setting
+        // $fine = FineSetting::first();
+        // $late_fee_per_day = $fine->late_fee_per_day;
 
-        if ($returnBook['condition'] == ReturnBookCondition::GOOD->value) {
-            // Kondisi buku sesuai 
-            $other_fee = 0;
-        } elseif ($returnBook['condition'] == ReturnBookCondition::DAMAGE->value) {
-            $damage_fee_percentage = $fine->damage_fee_percentage;
-            // kondisi buku rusak
-            $other_fee = $price_book * ($damage_fee_percentage / 100);
-        } else {
-            $lost_fee_percentage = $fine->lost_fee_percentage;
-            // kondisi buku hilang
-            $other_fee = $price_book * ($lost_fee_percentage / 100);
-        }
+        // if ($returnBook['condition'] == ReturnBookCondition::GOOD->value) {
+        //     // Kondisi buku sesuai 
+        //     $other_fee = 0;
+        // } elseif ($returnBook['condition'] == ReturnBookCondition::DAMAGE->value) {
+        //     $damage_fee_percentage = $fine->damage_fee_percentage;
+        //     // kondisi buku rusak
+        //     $other_fee = $price_book * ($damage_fee_percentage / 100);
+        // } else {
+        //     $lost_fee_percentage = $fine->lost_fee_percentage;
+        //     // kondisi buku hilang
+        //     $other_fee = $price_book * ($lost_fee_percentage / 100);
+        // }
 
-        // Denda keterlambatan 
-        $late_fee = 0;
+        // // Denda keterlambatan 
+        // $late_fee = 0;
 
-        if ($return_date->gt($due_date)) {
-            // Selisih hari
-            $diff_date = $due_date->diffInDays($return_date, true);
-            // Denda keterlambatan
-            $late_fee = $late_fee_per_day * $diff_date;
-        }
+        // if ($return_date->gt($due_date)) {
+        //     // Selisih hari
+        //     $diff_date = $due_date->diffInDays($return_date, true);
+        //     // Denda keterlambatan
+        //     $late_fee = $late_fee_per_day * $diff_date;
+        // }
 
-        // Total fine
-        $total_fee = $late_fee + $other_fee;
-        // Status Pembayaran 
-        if ($total_fee == 0) {
-            $payment_status = FinePaymentStatus::SUCCESS->value;
-        } else {
-            $payment_status = FinePaymentStatus::PENDING->value;
-        }
+        // // Total fine
+        // $total_fee = $late_fee + $other_fee;
+        // // Status Pembayaran 
+        // if ($total_fee == 0) {
+        //     $payment_status = FinePaymentStatus::SUCCESS->value;
+        // } else {
+        //     $payment_status = FinePaymentStatus::PENDING->value;
+        // }
 
-        ReturnBookCheck::create([
-            'return_book_id' => $return->id,
-            'condition' => $returnBook['condition'],
-            'notes' => $return['notes'],
-        ]);
+        // ReturnBookCheck::create([
+        //     'return_book_id' => $return->id,
+        //     'condition' => $returnBook['condition'],
+        //     'notes' => $return['notes'],
+        // ]);
 
-        $return->update([
-            'status' => ReturnBookStatus::RETURNED->value,
-        ]);
+        // $return->update([
+        //     'status' => ReturnBookStatus::RETURNED->value,
+        // ]);
 
-        $return->book->stock->update([
-            'available' => $return->book->stock->available + 1,
-            'loan' => $return->book->stock->loan - 1,
-        ]);
+        // $return->book->stock->update([
+        //     'available' => $return->book->stock->available + 1,
+        //     'loan' => $return->book->stock->loan - 1,
+        // ]);
 
-        // Create fine
-        $fine = Fine::create([
-            'return_book_id' => $return->id,
-            'user_id' => $return->user_id,
-            'late_fee' => $late_fee,
-            'other_fee' => $other_fee,
-            'total_fee' => $total_fee,
-            'payment_status' => $payment_status,
-            'fine_date' => Carbon::now(),
-        ]);
+        // // Create fine
+        // $fine = Fine::create([
+        //     'return_book_id' => $return->id,
+        //     'user_id' => $return->user_id,
+        //     'late_fee' => $late_fee,
+        //     'other_fee' => $other_fee,
+        //     'total_fee' => $total_fee,
+        //     'payment_status' => $payment_status,
+        //     'fine_date' => Carbon::now(),
+        // ]);
 
-        return redirect('/return-books')->with(['message' => 'Success Add Data Return Book']);
+        return redirect('/return-books')->with(['message' => 'Success Return Book']);
     }
 
     /**

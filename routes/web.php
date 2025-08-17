@@ -11,11 +11,9 @@ use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\StockBookController;
 use App\Http\Controllers\ReturnBookController;
 use App\Http\Controllers\FineSettingController;
+use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\ReturnBookCheckController;
 
-Route::get('/', function () {
-    return view('home', ['title' => 'Home']);
-});
 
 Route::get('/login', function () {
     return view('signin');
@@ -64,12 +62,17 @@ Route::controller(StockBookController::class)->group(function () {
 Route::controller(LoanBookController::class)->group(function () {
     Route::get('/loan-books', 'index');
     Route::post('/loan-books', 'store');
+
+    Route::get('/dashboard/loan-books', 'index');
+    Route::post('/dashboard/loan-books', 'store');
 });
 
 Route::controller(ReturnBookController::class)->group(function () {
     Route::get('/return-books', 'index');
     Route::get('/loan-books/{loan_book}', 'getLoanBook');
     Route::post('/return-books', 'store');
+    Route::get('/dashboard/return-books', 'index');
+    Route::post('/dashboard/return-books', 'store');
 });
 
 Route::post('/return-book-checks', [ReturnBookCheckController::class, 'store']);
@@ -78,4 +81,13 @@ Route::patch('/fines/{fine}', [FineController::class, 'update']);
 Route::controller(FineSettingController::class)->group(function () {
     Route::get('/fine-settings', 'index');
     Route::patch('/fine-settings/{fineSetting}', 'update');
+});
+
+// Route::controller(FineSettingController::class)->group(function () {
+//     Route::get('/fine-settings', 'index');
+//     Route::patch('/fine-settings/{fineSetting}', 'update');
+// });
+
+Route::controller(DashboardAdminController::class)->group(function () {
+    Route::get('/dashboard', 'index');
 });

@@ -1,107 +1,32 @@
 import ApexCharts from "apexcharts";
-
-// ===== chartOne
 const chart01 = () => {
-    const chartOneOptions = {
+    const {
+        dates = [],
+        loanData = [],
+        returnData = [],
+    } = window.chartData || [];
+
+    const options = {
         series: [
-            {
-                name: "Sales",
-                data: [
-                    168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112,
-                ],
-            },
+            { name: "Peminjaman", data: loanData },
+            { name: "Pengembalian", data: returnData },
         ],
-        colors: ["#465fff"],
-        chart: {
-            fontFamily: "Outfit, sans-serif",
-            type: "bar",
-            height: 180,
-            toolbar: {
-                show: false,
-            },
-        },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                columnWidth: "39%",
-                borderRadius: 5,
-                borderRadiusApplication: "end",
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        stroke: {
-            show: true,
-            width: 4,
-            colors: ["transparent"],
-        },
-        xaxis: {
-            categories: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-            ],
-            axisBorder: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
-        },
-        legend: {
-            show: true,
-            position: "top",
-            horizontalAlign: "left",
-            fontFamily: "Outfit",
-
-            markers: {
-                radius: 99,
-            },
-        },
-        yaxis: {
-            title: false,
-        },
-        grid: {
-            yaxis: {
-                lines: {
-                    show: true,
-                },
-            },
-        },
-        fill: {
-            opacity: 1,
-        },
-
-        tooltip: {
-            x: {
-                show: false,
-            },
-            y: {
-                formatter: function (val) {
-                    return val;
-                },
-            },
-        },
+        chart: { type: "bar", height: 360, toolbar: { show: false } },
+        colors: ["#3b82f6", "#10b981"],
+        plotOptions: { bar: { columnWidth: "5%", borderRadius: 4 } },
+        stroke: { width: 4, colors: ["transparent"] },
+        dataLabels: { enabled: false },
+        xaxis: { categories: dates },
+        yaxis: { title: { text: "Jumlah" } },
+        tooltip: { shared: true, intersect: false },
     };
 
-    const chartSelector = document.querySelectorAll("#chartOne");
-
-    if (chartSelector.length) {
-        const chartFour = new ApexCharts(
+    if (document.querySelector("#chartOne")) {
+        const chart = new ApexCharts(
             document.querySelector("#chartOne"),
-            chartOneOptions
+            options
         );
-        chartFour.render();
+        chart.render();
     }
 };
 
