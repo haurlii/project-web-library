@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 
 class BookController extends Controller
 {
@@ -28,7 +29,7 @@ class BookController extends Controller
         $category = Category::orderBy('name', 'asc')->get();
 
         return view(
-            'book.index',
+            'role-admin.book.index',
             [
                 'title' => 'Buku',
                 'books' => $book,
@@ -53,7 +54,7 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $validate_book = $request->validate([
-            'title' => 'required|string|min:5',
+            'title' => 'required|string|min:3',
             'isbn' => 'nullable|integer:strict|min_digits:4',
             'publication_year' => 'nullable|integer:strict|max_digits:4',
             'language' => ['nullable', new Enum(BookLanguage::class)],
@@ -63,21 +64,24 @@ class BookController extends Controller
             'publisher_id' => 'required|string|integer:strict|exists:publishers,id',
             'category_id' => 'required|string|integer:strict|exists:categories,id',
             'synopsis' => 'nullable|string|min:10',
-            'cover' => 'nullable|image|max:10000',
         ]);
 
         $validate_stock_book = $request->validate([
             'total' => 'nullable|integer:strict',
         ]);
 
+        // Book code
         $validate_book['book_code'] = Str::of('BK-' . Str::random(9))->upper();
-        $validate_book['slug'] = Str::slug($validate_book['title']) . '-' . Str::random(4);
+        // Book slug
+        $validate_book['slug'] = Str::of(Str::slug($validate_book['title']) . '-' . Str::random(4))->lower();
+        // Book status
         $validate_book['status'] = $validate_stock_book['total'] > 0 ? BookStatus::AVAILABLE->value : BookStatus::UNAVAILABLE->value;
-
-        if ($request->hasFile('cover')) {
-            $path = $request->file('cover')->store('img/books', 'public');
-            $validate_book['cover'] = $path;
-        };
+        // Book cover
+        if ($request->cover) {
+            $newPath = Str::after($request->cover, 'tmp/');
+            Storage::disk('public')->move($request->cover, "img/books/$newPath");
+            $validate_book['cover'] = "img/books/$newPath";
+        }
 
         $book = Book::create($validate_book);
 
@@ -86,7 +90,7 @@ class BookController extends Controller
             'available' => $total,
         ]);
 
-        return redirect('/books')->with(['message' => 'Success Add Data Book']);
+        return Redirect::route('admin.books.index')->with(['message' => 'Berhasil menambahkan data buku baru']);
     }
 
     /**
@@ -111,7 +115,7 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         $validate_book = $request->validate([
-            'title' => 'required|string|min:5',
+            'title' => 'required|string|min:3',
             'isbn' => 'nullable|integer:strict|min:4',
             'publication_year' => 'nullable|integer:strict|max_digits:4',
             'language' => ['nullable', new Enum(BookLanguage::class)],
@@ -121,7 +125,6 @@ class BookController extends Controller
             'publisher_id' => 'required|string|integer:strict|exists:publishers,id',
             'category_id' => 'required|string|integer:strict|exists:categories,id',
             'synopsis' => 'nullable|string|min:10',
-            'cover' => 'nullable|image|max:10000',
         ]);
 
         $validate_stock_book = $request->validate([
@@ -130,18 +133,20 @@ class BookController extends Controller
 
         $validate_book['status'] = $validate_stock_book['total'] > 0 ? BookStatus::AVAILABLE->value : BookStatus::UNAVAILABLE->value;
 
-
-        if ($request->hasFile('cover')) {
+        if ($request->cover) {
             if (!empty($book->cover)) {
                 Storage::disk('public')->delete($book->cover);
             }
-            $path = $request->file('cover')->store('img/books', 'public');
-            $validate_book['cover'] = $path;
-        };
+            $newPath = Str::after($request->cover, 'tmp/');
+
+            Storage::disk('public')->move($request->cover, "img/books/$newPath");
+
+            $validate_book['cover'] = "img/books/$newPath";
+        }
 
         $book->update($validate_book);
 
-        return redirect('/books')->with(['message' => 'Success Edit Data Book']);
+        return Redirect::route('admin.books.index')->with(['message' => 'Berhasil mengubah data buku yang sudah ada']);
     }
 
     /**
@@ -154,6 +159,6 @@ class BookController extends Controller
         }
         $book->delete();
 
-        return redirect('/books')->with(['message' => 'Success Delete Data Book']);
+        return Redirect::route('admin.books.index')->with(['message' => 'Berhasil menghapus data buku yang tidak terpakai']);
     }
 }

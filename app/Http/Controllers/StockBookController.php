@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\StockBook;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class StockBookController extends Controller
 {
@@ -15,7 +16,7 @@ class StockBookController extends Controller
     public function index()
     {
         $stock = StockBook::latest()->with(['book'])->paginate(7);
-        return view('stock-book.index', ['title' => 'Stok Buku', 'stocks' => $stock]);
+        return view('role-admin.stock-book.index', ['title' => 'Stok Buku', 'stocks' => $stock]);
     }
 
     /**
@@ -78,7 +79,7 @@ class StockBookController extends Controller
 
         $stock_book->update($validated);
 
-        return redirect('/stock-books')->with(['message' => 'Success Edit Data Stock Book']);
+        return Redirect::route('admin.stock-books.index')->with(['message' => 'Berhasil mengubah data stok buku']);
     }
 
     /**

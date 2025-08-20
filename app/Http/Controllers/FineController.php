@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Fine;
 use Illuminate\Http\Request;
 use App\Enums\FinePaymentStatus;
+use Illuminate\Support\Facades\Redirect;
 
 class FineController extends Controller
 {
@@ -61,7 +62,7 @@ class FineController extends Controller
             'payment_status' => FinePaymentStatus::SUCCESS->value,
         ]);
 
-        return redirect('/return-books')->with(['message' => 'Success Payment Return']);
+        return Redirect::route('admin.return-books.index')->with(['message' => 'Berhasil membayar denda']);
     }
 
     /**

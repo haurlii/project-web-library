@@ -46,7 +46,7 @@ class ReturnBook extends Model
     // Relasi Ke Model LoanBook
     public function loanBook(): BelongsTo
     {
-        return $this->belongsTo(LoanBook::class, 'id');
+        return $this->belongsTo(LoanBook::class, 'loan_id', 'id');
     }
 
     // Relasi Ke Model ReturnBookCheck

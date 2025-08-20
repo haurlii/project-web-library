@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FineSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class FineSettingController extends Controller
 {
@@ -11,7 +12,7 @@ class FineSettingController extends Controller
     {
         $fineSetting = FineSetting::first();
 
-        return view('fine-setting.index', ['title' => 'Pengaturan Denda', 'fineSetting' => $fineSetting]);
+        return view('role-admin.fine-setting.index', ['title' => 'Pengaturan Denda', 'fineSetting' => $fineSetting]);
     }
 
     public function update(Request $request, FineSetting $fineSetting)
@@ -24,6 +25,6 @@ class FineSettingController extends Controller
 
         $fineSetting->update($fine);
 
-        return redirect('/fine-settings')->with(['message' => 'Berhasil Mengubah Denda']);
+        return Redirect::route('admin.fine-settings.index')->with(['message' => 'Berhasil mengubah setingan denda']);
     }
 }

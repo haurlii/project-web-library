@@ -42,6 +42,6 @@ class LoanBook extends Model
     // Relasi Ke Model ReturnBook
     public function returnBook(): HasOne
     {
-        return $this->hasOne(ReturnBook::class, 'loan_id');
+        return $this->hasOne(ReturnBook::class, 'loan_id', 'id');
     }
 }

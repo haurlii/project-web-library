@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Enums\ReturnBookStatus;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class LoanBookController extends Controller
 {
@@ -24,7 +25,7 @@ class LoanBookController extends Controller
         $book = Book::orderBy('title', 'asc')->get();
 
         return view(
-            'loan-book.index',
+            'role-admin.loan-book.index',
             [
                 'title' => 'Peminjaman Buku',
                 'loans' => $loan,
@@ -34,17 +35,6 @@ class LoanBookController extends Controller
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $loan = $request->validate([
@@ -57,7 +47,7 @@ class LoanBookController extends Controller
         // Cek buku sudah pinjam atau belum
         $previous_loan = LoanBook::where(['user_id' => $loan['user_id'], 'book_id' => $loan['book_id']])->exists();
         if ($previous_loan) {
-            return redirect('/loan-books')->with(['error' => 'User sudah meminjam buku dengan judul yang sama!']);
+            return Redirect::route('admin.loan-books.index')->with(['error' => 'Siswa sudah meminjam buku dengan judul yang sama!']);
         }
 
         // Fullname user
@@ -87,38 +77,6 @@ class LoanBookController extends Controller
             'loan' => $stock_loan,
         ]);
 
-        return redirect('/loan-books')->with(['message' => 'Success Loan Book']);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(LoanBook $loan_book)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(LoanBook $loan_book)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, LoanBook $loan_book)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(LoanBook $loan_book)
-    {
-        // 
+        return Redirect::route('admin.loan-books.index')->with(['message' => 'Berhasil meminjam buku']);
     }
 }

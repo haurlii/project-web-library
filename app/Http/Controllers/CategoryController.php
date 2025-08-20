@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 
 class CategoryController extends Controller
 {
@@ -15,7 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $category = Category::latest()->paginate(7);
-        return view('category.index', ['title' => 'Kategori Buku', 'categories' => $category]);
+        return view('role-admin.category.index', ['title' => 'Kategori Buku', 'categories' => $category]);
     }
 
     /**
@@ -34,19 +36,21 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|min:3',
             'description' => 'nullable|string|min:10',
-            'cover' => 'nullable|image|max:10000',
         ]);
 
         $validated['slug'] = Str::slug($request->name) . Str::random(6);
 
-        if ($request->hasFile('cover')) {
-            $path = $request->file('cover')->store('img/categories', 'public');
-            $validated['cover'] = $path;
-        };
+        if ($request->cover) {
+            $newPath = Str::after($request->cover, 'tmp/');
+
+            Storage::disk('public')->move($request->cover, "img/categories/$newPath");
+
+            $validated['cover'] = "img/categories/$newPath";
+        }
 
         Category::create($validated);
 
-        return redirect('/categories')->with(['message' => 'Success Add Data Category']);
+        return Redirect::route('admin.categories.index')->with(['message' => 'Berhasil menambahkan data kategori buku']);
     }
 
     /**
@@ -73,24 +77,26 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|min:3',
             'description' => 'nullable|string|min:10',
-            'cover' => 'nullable|image|max:10000',
         ]);
 
         if ($request->name != $category->name) {
             $validated['slug'] = Str::slug($request->name) . Str::random(6);
         }
 
-        if ($request->hasFile('cover')) {
+        if ($request->cover) {
             if (!empty($category->cover)) {
                 Storage::disk('public')->delete($category->cover);
             }
-            $path = $request->file('cover')->store('img/categories', 'public');
-            $validated['cover'] = $path;
-        };
+            $newPath = Str::after($request->cover, 'tmp/');
+
+            Storage::disk('public')->move($request->cover, "img/categories/$newPath");
+
+            $validated['cover'] = "img/categories/$newPath";
+        }
 
         $category->update($validated);
 
-        return redirect('/categories')->with('message', 'Success Edit Data Category');
+        return Redirect::route('admin.categories.index')->with('message', 'Berhasil mengubah data kategori buku');
     }
 
     /**
@@ -103,6 +109,6 @@ class CategoryController extends Controller
         }
         $category->delete();
 
-        return redirect('/categories')->with(['message' => 'Success Delete Data Category']);
+        return Redirect::route('admin.categories.index')->with(['message' => 'Berhasil menghapus data kategori buku']);
     }
 }

@@ -7,8 +7,14 @@ use App\Models\User;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Publisher;
+use App\Models\StockBook;
 use App\Models\FineSetting;
 use Illuminate\Database\Seeder;
+use Database\Seeders\BookSeeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\AuthorSeeder;
+use Database\Seeders\CategorySeeder;
+use Database\Seeders\PublisherSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +23,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([AuthorSeeder::class, PublisherSeeder::class, CategorySeeder::class, UserSeeder::class]);
+        $this->call([AuthorSeeder::class, PublisherSeeder::class, CategorySeeder::class, UserSeeder::class, BookSeeder::class]);
         // $this->call([UserSeeder::class]);
 
         FineSetting::create([

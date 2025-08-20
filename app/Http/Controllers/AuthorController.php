@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthorController extends Controller
 {
@@ -15,7 +17,7 @@ class AuthorController extends Controller
     public function index()
     {
         $author = Author::latest()->paginate(7);
-        return view('author.index', ['title' => 'Penulis Buku', 'authors' => $author]);
+        return view('role-admin.author.index', ['title' => 'Penulis Buku', 'authors' => $author]);
     }
 
     /**
@@ -33,19 +35,21 @@ class AuthorController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|min:5',
-            'avatar' => 'image|max:10000',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']) . Str::random(6);
+        $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(6);
 
-        if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('img/authors', 'public');
-            $validated['avatar'] = $path;
-        };
+        if ($request->avatar) {
+            $newPath = Str::after($request->avatar, 'tmp/');
+
+            Storage::disk('public')->move($request->avatar, "img/authors/$newPath");
+
+            $validated['avatar'] = "img/authors/$newPath";
+        }
 
         Author::create($validated);
 
-        return redirect('/authors')->with(['message' => 'Success Add Data Author']);
+        return Redirect::route('admin.authors.index')->with(['message' => 'Berhasil menambahkan data penulis buku']);
     }
 
     /**
@@ -71,24 +75,26 @@ class AuthorController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|min:5',
-            'avatar' => 'image|max:10000',
         ]);
 
         if ($request->name != $author->name) {
-            $validated['slug'] = Str::slug($request->name) . Str::random(6);
+            $validated['slug'] = Str::slug($request->name) . '-' . Str::random(6);
         }
 
-        if ($request->hasFile('avatar')) {
+        if ($request->avatar) {
             if (!empty($author->avatar)) {
                 Storage::disk('public')->delete($author->avatar);
             }
-            $path = $request->file('avatar')->store('img/authors', 'public');
-            $validated['avatar'] = $path;
-        };
+            $newPath = Str::after($request->avatar, 'tmp/');
+
+            Storage::disk('public')->move($request->avatar, "img/authors/$newPath");
+
+            $validated['avatar'] = "img/authors/$newPath";
+        }
 
         $author->update($validated);
 
-        return redirect('/authors')->with('message', 'Success Edit Data Author');
+        return Redirect::route('admin.authors.index')->with('message', 'Berhasil mengubah data penulis buku');
     }
 
     /**
@@ -101,6 +107,6 @@ class AuthorController extends Controller
         }
         $author->delete();
 
-        return redirect('/authors')->with(['message' => 'Success Delete Data Author']);
+        return Redirect::route('admin.authors.index')->with(['message' => 'Berhasil menghapus data penulis buku']);
     }
 }

@@ -13,6 +13,7 @@ use App\Enums\FinePaymentStatus;
 use App\Enums\ReturnBookCondition;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Support\Facades\Redirect;
 
 class ReturnBookCheckController extends Controller
 {
@@ -67,11 +68,11 @@ class ReturnBookCheckController extends Controller
         } elseif ($check['condition'] == ReturnBookCondition::DAMAGE->value) {
             $damage_fee_percentage = $fine->damage_fee_percentage;
             // kondisi buku rusak
-            $other_fee = $price_book * $damage_fee_percentage;
+            $other_fee = $price_book * ($damage_fee_percentage / 100);
         } else {
             $lost_fee_percentage = $fine->lost_fee_percentage;
             // kondisi buku hilang
-            $other_fee = $price_book * $lost_fee_percentage;
+            $other_fee = $price_book * ($lost_fee_percentage / 100);
         }
 
         // Denda keterlambatan 
@@ -109,7 +110,7 @@ class ReturnBookCheckController extends Controller
             'fine_date' => Carbon::now(),
         ]);
 
-        return redirect('/return-books')->with(['message' => 'Success Check Data Return Book']);
+        return Redirect::route('admin.return-books.index')->with(['message' => 'Berhasil cek data pengembalian buku']);
     }
 
     /**

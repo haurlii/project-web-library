@@ -43,7 +43,7 @@ class DashboardAdminController extends Controller
         $loan = LoanBook::count();
         $return = ReturnBook::count();
 
-        return view('dashboard.index', [
+        return view('role-admin.dashboard.index', [
             'dates' => $dates,
             'title' => 'Dashboard',
             'loanData' => $loanData,

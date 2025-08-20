@@ -4,9 +4,10 @@
 
         <nav>
             <ol class="flex items-center gap-1.5">
+                @if (Auth::user()->user_role->value == \App\Enums\UserRole::ADMIN->value)
                 <li>
                     <a class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
-                        href="/dashboard">
+                        href="{{ route('admin.dashboard') }}">
                         Dashboard
                         <svg class="stroke-current" width="17" height="16" viewBox="0 0 17 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -15,6 +16,7 @@
                         </svg>
                     </a>
                 </li>
+                @endif
                 <li class="text-sm text-gray-800 dark:text-white/90" x-text="pageName"></li>
             </ol>
         </nav>

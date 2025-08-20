@@ -5,7 +5,7 @@ namespace App\Enums;
 enum LoanBookStatus: string
 {
     case RETURNED = 'Dikembalikan';
-    case CHECKED = 'Pengecekan';
+    case LOAN = 'Dipinjam';
     case FINE = 'Denda';
 
     public static function options(): array

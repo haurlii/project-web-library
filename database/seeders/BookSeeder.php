@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Publisher;
+use App\Models\StockBook;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -20,6 +21,10 @@ class BookSeeder extends Seeder
             Category::all(),
             Author::all(),
             Publisher::all(),
-        ])->create();
+        ])->create()->each(function ($book) {
+            StockBook::factory()->create([
+                'book_id' => $book->id,
+            ]);
+        });
     }
 }
