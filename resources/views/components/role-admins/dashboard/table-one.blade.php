@@ -74,7 +74,7 @@
                     <td class="py-3">
                         <div class="flex items-center">
                             <p class="text-gray-500 text-sm dark:text-gray-400">
-                                {{ $loan->loan_date }}
+                                {{ $loan->loan_date->format('d F Y') }}
                             </p>
                         </div>
                     </td>

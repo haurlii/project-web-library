@@ -226,7 +226,7 @@
                 </td>
                 <td class="px-6 py-3">
                     <div class="flex items-center mr-3 whitespace-nowrap max-w-lg">
-                        {{ $book->price ?? 'Tidak tersedia' }}
+                        {{ 'Rp ' . number_format($book->price, 0, ',', '.') ?? 'Tidak tersedia' }}
                     </div>
                 </td>
                 <td class="px-6 py-3">
