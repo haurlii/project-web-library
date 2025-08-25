@@ -99,7 +99,7 @@
 
                 <div class="col-span-1 sm:col-span-3">
                     <label for="firstname" class=" mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                        Nama Awal
+                        Nama Depan
                     </label>
                     <input type="text" name="firstname" id="firstname" value="{{ old('firstname') }}"
                         placeholder="Enter the firstname" autofocus autocomplete="off"

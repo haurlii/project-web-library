@@ -1,4 +1,4 @@
-<x-layout :title="$title">
+<x-layouts.app :title="$title">
     {{-- <p>This is {{ $title }} Page</p> --}}
 
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
@@ -41,4 +41,4 @@
     };
     </script>
     @endpush
-</x-layout>
+</x-layouts.app>

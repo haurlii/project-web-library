@@ -57,14 +57,9 @@ class ReturnBookCheckController extends Controller
         $fine = FineSetting::first();
         $late_fee_per_day = $fine->late_fee_per_day;
 
-        // Status Pembayaran ditunda
-        $payment_status = FinePaymentStatus::PENDING->value;
-
         if ($check['condition'] == ReturnBookCondition::GOOD->value) {
             // Kondisi buku sesuai 
             $other_fee = 0;
-            // Status pembayaran lunas
-            $payment_status = FinePaymentStatus::SUCCESS->value;
         } elseif ($check['condition'] == ReturnBookCondition::DAMAGE->value) {
             $damage_fee_percentage = $fine->damage_fee_percentage;
             // kondisi buku rusak
@@ -87,6 +82,12 @@ class ReturnBookCheckController extends Controller
 
         // Total fine
         $total_fee = $late_fee + $other_fee;
+        // Status Pembayaran 
+        if ($total_fee == 0) {
+            $payment_status = FinePaymentStatus::SUCCESS->value;
+        } else {
+            $payment_status = FinePaymentStatus::PENDING->value;
+        }
 
         ReturnBookCheck::create($check);
 

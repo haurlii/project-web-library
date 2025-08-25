@@ -1,10 +1,10 @@
-<x-layout :title="$title">
+<x-layouts.app :title="$title">
     @push('styles')
     @endpush
 
     <div class="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
         <!-- Breadcrumb Start -->
-        <x-breadcrumb>{{ $title }}</x-breadcrumb>
+        <x-partials.breadcrumb>{{ $title }}</x-partials.breadcrumb>
         <!-- Breadcrumb End -->
 
         <div class="grid grid-cols-12 gap-4 md:gap-6">
@@ -25,4 +25,4 @@
     </div>
     @push('scripts')
     @endpush
-</x-layout>
+    </x-layout>

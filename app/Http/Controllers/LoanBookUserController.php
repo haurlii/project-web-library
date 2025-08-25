@@ -46,21 +46,20 @@ class LoanBookUserController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $loan = $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
             'book_id' => 'required|integer|exists:books,id',
             'loan_date' => 'nullable|date',
             'due_date' => 'nullable|date',
         ]);
 
         // Cek buku sudah pinjam atau belum
-        $previous_loan = LoanBook::where(['user_id' => $loan['user_id'], 'book_id' => $loan['book_id']])->exists();
+        $previous_loan = LoanBook::where(['user_id' => $user->id, 'book_id' => $loan['book_id']])->whereDoesntHave('returnBook')->exists();
         if ($previous_loan) {
             return Redirect::route('admin.loan-books.index')->with(['error' => 'Siswa sudah meminjam buku dengan judul yang sama!']);
         }
 
         // Fullname user
-        $user = User::where('id', $loan['user_id'])->first();
         $name = $user->firstname . ' ' . $user->lastname;
         $user_code = collect(explode(' ', trim($name)))->map(fn($word) => strtoupper(substr($word, 0, 1)))->implode('');
 
@@ -70,6 +69,9 @@ class LoanBookUserController extends Controller
 
         // Loan code
         $loan['loan_code'] = Str::of('LN-' . $user_code . '-' . $book_code . '-' . Str::random(6))->upper();
+
+        // User ID
+        $loan['user_id'] = $user->id;
 
         // Loan Date dan Due Date
         $loan['loan_date'] = Carbon::parse($loan['loan_date'])->format('Y-m-d');

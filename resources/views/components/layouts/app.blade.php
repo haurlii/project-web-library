@@ -29,23 +29,25 @@
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
         :class="{'dark bg-gray-900': darkMode === true}">
         <!-- ===== Preloader Start ===== -->
-        <x-preloader />
+        <x-partials.preloader />
         <!-- ===== Preloader End ===== -->
 
         <!-- ===== Page Wrapper Start ===== -->
         <div class="flex h-screen overflow-hidden">
             <!-- ===== Sidebar Start ===== -->
-            <x-sidebar />
+            @if (Auth::user()->user_role->value === \App\Enums\UserRole::ADMIN->value)
+            <x-partials.sidebar />
+            @endif
             <!-- ===== Sidebar End ===== -->
 
             <!-- ===== Content Area Start ===== -->
             <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
                 <!-- Small Device Overlay Start -->
-                <x-overlay />
+                <x-partials.overlay />
                 <!-- Small Device Overlay End -->
 
                 <!-- ===== Header Start ===== -->
-                <x-navbar />
+                <x-partials.navbar :title="$title" />
                 <!-- ===== Header End ===== -->
 
                 <!-- ===== Main Content Start ===== -->

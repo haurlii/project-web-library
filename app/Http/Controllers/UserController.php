@@ -9,6 +9,7 @@ use App\Enums\UserGender;
 use App\Enums\UserStatus;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
@@ -76,12 +77,88 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
+    public function editAdmin()
     {
-        //
+        return view('role-admin.profile.edit', ['title' => 'Profile']);
+    }
+
+    public function updateAdmin(Request $request)
+    {
+        $user = Auth::user();
+        $validated = $request->validate([
+            'username' => 'required|alpha_num|min:8|unique:users,username,' . $user->id,
+            'email' => 'required|string|email:dns|unique:users,email,' . $user->id,
+            'firstname' => 'nullable|string',
+            'lastname' => 'nullable|string',
+            'city_of_birth' => 'nullable|string',
+            'date_of_birth' => 'nullable|string',
+            'gender' => ['nullable', 'string', new Enum(UserGender::class)],
+            'contact' => 'nullable|string|max:15',
+        ], [
+            'username.min' => 'Username minimal 8 karakter.',
+            'username.required' => 'Username wajib diisi.',
+            'username.alpha_num' => 'Username hanya boleh berisi huruf dan angka.',
+        ]);
+
+        if ($request->avatar) {
+            if (!empty($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $newPath = Str::after($request->avatar, 'tmp/');
+
+            Storage::disk('public')->move($request->avatar, "img/users/$newPath");
+
+            $validated['avatar'] = "img/users/$newPath";
+        }
+
+        $validated['date_of_birth'] = Carbon::parse($validated['date_of_birth'])->format('Y-m-d');
+
+        $user->fill($validated);
+        $user->save();
+
+        return Redirect::route('admin.profiles')->with(['message' => 'Berhasil mengubah informasi pribadi']);
+    }
+
+    public function editUser()
+    {
+        return view('role-user.profile.edit', ['title' => 'Profile']);
+    }
+
+    public function updateUser(Request $request)
+    {
+        $user = Auth::user();
+        $validated = $request->validate([
+            'username' => 'required|alpha_num|min:8|unique:users,username,' . $user->id,
+            'email' => 'required|string|email:dns|unique:users,email,' . $user->id,
+            'firstname' => 'nullable|string',
+            'lastname' => 'nullable|string',
+            'city_of_birth' => 'nullable|string',
+            'date_of_birth' => 'nullable|string',
+            'gender' => ['nullable', 'string', new Enum(UserGender::class)],
+            'contact' => 'nullable|string|max:15',
+        ], [
+            'username.min' => 'Username minimal 8 karakter.',
+            'username.required' => 'Username wajib diisi.',
+            'username.alpha_num' => 'Username hanya boleh berisi huruf dan angka.',
+        ]);
+
+        if ($request->avatar) {
+            if (!empty($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $newPath = Str::after($request->avatar, 'tmp/');
+
+            Storage::disk('public')->move($request->avatar, "img/users/$newPath");
+
+            $validated['avatar'] = "img/users/$newPath";
+        }
+
+        $validated['date_of_birth'] = Carbon::parse($validated['date_of_birth'])->format('Y-m-d');
+
+        $user->fill($validated);
+        $user->save();
+
+        return Redirect::route('admin.profiles')->with(['message' => 'Berhasil mengubah informasi pribadi']);
     }
 
     /**

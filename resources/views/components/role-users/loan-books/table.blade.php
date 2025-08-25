@@ -156,9 +156,6 @@
                 <th scope="col" class="px-8 py-3">Tanggal Peminjaman</th>
                 <th scope="col" class="px-8 py-3">Batas Peminjaman</th>
                 <th scope="col" class="px-8 py-3">Status</th>
-                <th scope="col" class="px-8 py-3">
-                    <span class="sr-only">Actions</span>
-                </th>
             </tr>
         </thead>
         <tbody>
@@ -209,17 +206,6 @@
                             class="inline-flex items-center justify-center gap-1 rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-600 dark:bg-brand-500/15 dark:text-brand-500">
                             {{ \App\Enums\LoanBookStatus::LOAN->value }}
                         </span>
-                        @endif
-                    </div>
-                </td>
-                <td class="px-8 py-3">
-                    <div class="flex items-center space-x-4">
-                        @if (!$loan->returnBook?->id)
-                        <button type="button" data-modal-target="returnBookModal-{{ $loan->id }}"
-                            data-modal-toggle="returnBookModal-{{ $loan->id }}"
-                            class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            Return
-                        </button>
                         @endif
                     </div>
                 </td>

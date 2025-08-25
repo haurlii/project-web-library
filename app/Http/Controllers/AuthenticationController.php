@@ -12,7 +12,7 @@ class AuthenticationController extends Controller
     // tampilkan form login
     public function create()
     {
-        return view('signin', ['title' => 'Sign In']);
+        return view('auth.login', ['title' => 'Sign In']);
     }
 
     // proses login
@@ -29,16 +29,15 @@ class AuthenticationController extends Controller
         if (Auth::attempt([$fieldType => $request->user_cred, 'password' => $request->password])) {
             $request->session()->regenerate();
 
-            if (Auth::user()->user_role->value == UserRole::ADMIN->value) {
+            if (Auth::user()->user_role->value === UserRole::ADMIN->value) {
                 return Redirect::route('admin.dashboard');
             }
-
             return Redirect::route('user.books.index');
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ]);
+            'user_cred' => 'Email atau password salah.',
+        ])->withInput();
     }
 
     // logout

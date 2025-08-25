@@ -101,6 +101,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/dashboard/users', 'store')->name('admin.users.store');
         Route::patch('/dashboard/users/{user}', 'update')->name('admin.users.update');
         Route::delete('/dashboard/users/{user}', 'destroy')->name('admin.users.destroy');
+        // Profile admin
+        Route::get('/dashboard/profiles', 'editAdmin')->name('admin.profiles');
+        Route::patch('/dashboard/profiles', 'updateAdmin')->name('admin.profiles.update');
+
+        // Profile user
+        Route::get('/profiles', 'editUser')->name('user.profiles');
+        Route::patch('/profiles', 'updateUser')->name('user.profiles.update');
     });
 
     Route::controller(FineController::class)->group(function () {
