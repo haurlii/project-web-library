@@ -173,12 +173,22 @@
                         class=" mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                         Tanggal Lahir
                     </label>
-                    <input type="date" datepicker datepicker-format="dd MM yyyy" name="date_of_birth" id="date_of_birth"
-                        value="{{ old('date_of_birth') }}" placeholder="Enter the date" autofocus autocomplete="off"
-                        class="h-11 w-full rounded-lg border px-4 py-2.5 text-sm shadow-theme-xs @error('date_of_birth') bg-red-50 dark:bg-red-900/20 border-red-500 text-red-600 placeholder-red-50 focus:ring-red-500/10 focus:border-red-300 dark:text-red-500 dark:placeholder-red-500 dark:border-red-800 dark:focus:ring-red-50/10 dark:focus:border-red-800 @enderror border-gray-300 text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                    @error('date_of_birth')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
-                    @enderror
+                    <div class="relative">
+                        <div class="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                            </svg>
+                        </div>
+                        <input type="string" datepicker datepicker-format="dd MM yyyy" name="date_of_birth"
+                            id="date_of_birth" value="{{ old('date_of_birth') }}" placeholder="Enter the date" autofocus
+                            autocomplete="off" readonly
+                            class="h-11 w-full rounded-lg border px-4 py-2.5 text-sm shadow-theme-xs @error('date_of_birth') bg-red-50 dark:bg-red-900/20 border-red-500 text-red-600 placeholder-red-50 focus:ring-red-500/10 focus:border-red-300 dark:text-red-500 dark:placeholder-red-500 dark:border-red-800 dark:focus:ring-red-50/10 dark:focus:border-red-800 @enderror border-gray-300 text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                        @error('date_of_birth')
+                        <p class="mt-2 text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="col-span-1 sm:col-span-3">

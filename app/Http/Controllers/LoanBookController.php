@@ -45,7 +45,7 @@ class LoanBookController extends Controller
         ]);
 
         // Cek buku sudah pinjam atau belum
-        $previous_loan = LoanBook::where(['user_id' => $loan['user_id'], 'book_id' => $loan['book_id']])->exists();
+        $previous_loan = LoanBook::where(['user_id' => $loan['user_id'], 'book_id' => $loan['book_id']])->whereDoesntHave('returnBook')->exists();
         if ($previous_loan) {
             return Redirect::route('admin.loan-books.index')->with(['error' => 'Siswa sudah meminjam buku dengan judul yang sama!']);
         }
