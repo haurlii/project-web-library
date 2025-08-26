@@ -46,7 +46,7 @@
             <!-- table header end -->
 
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                @foreach ($loans as $loan)
+                @foreach ($loanBooks as $loan)
                 <tr>
                     <td class="py-3">
                         <div class="flex items-center">

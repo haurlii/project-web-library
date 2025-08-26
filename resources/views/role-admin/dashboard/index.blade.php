@@ -5,7 +5,9 @@
         <div class="grid grid-cols-12 gap-4 md:gap-6">
             <div class="col-span-12 space-y-6 xl:col-span-12">
                 <!-- Metric Group One -->
-                <x-role-admins.dashboard.grid-info :user="$user" :book="$book" :loan="$loan" :return="$return" />
+                <x-role-admins.dashboard.grid-info :user="$user" :book="$book" :loanCount="$loanCount"
+                    :returnCount="$returnCount" :loanCountPerWeekly="$loanCountPerWeekly"
+                    :returnCountPerWeekly="$returnCountPerWeekly" />
                 <!-- Metric Group One -->
 
                 <!-- ====== Chart One Start -->
@@ -15,13 +17,13 @@
 
             <div class="col-span-12 xl:col-span-6">
                 <!-- ====== Table One Start -->
-                <x-role-admins.dashboard.table-one :loans="$loans" />
+                <x-role-admins.dashboard.table-one :loanBooks="$loanBooks" />
                 <!-- ====== Table One End -->
             </div>
 
             <div class="col-span-12 xl:col-span-6">
                 <!-- ====== Table One Start -->
-                <x-role-admins.dashboard.table-two :returns="$returns" />
+                <x-role-admins.dashboard.table-two :returnBooks="$returnBooks" />
                 <!-- ====== Table One End -->
             </div>
 

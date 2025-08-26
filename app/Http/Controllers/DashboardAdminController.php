@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Book;
 use App\Models\User;
+use App\Enums\UserRole;
 use App\Models\LoanBook;
+use App\Enums\UserStatus;
 use App\Models\ReturnBook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,42 +20,52 @@ class DashboardAdminController extends Controller
      */
     public function index()
     {
-        // Ambil tanggal 7 hari terakhir
-        $dates = LoanBook::select(DB::raw('DATE(created_at) as date'))
-            ->distinct()
-            ->orderBy('date')
-            ->take(7)
-            ->pluck('date')
-            ->toArray();
+        $dates = collect(range(0, 13))
+            ->map(fn($i) => now()->subDays($i)->format('Y-m-d'))
+            ->reverse()->toArray();
 
-        $loanData = array_map(
-            fn($date) => LoanBook::whereDate('loan_date', $date)->count(),
-            $dates
-        );
+        $loanData = collect($dates)->map(
+            fn($date) =>
+            LoanBook::whereDate('loan_date', $date)->count()
+        )->toArray();
 
-        $returnData = array_map(
-            fn($date) => ReturnBook::whereDate('return_date', $date)->count(),
-            $dates
-        );
+        $returnData = collect($dates)->map(
+            fn($date) =>
+            ReturnBook::whereDate('return_date', $date)->count()
+        )->toArray();
 
-        $loanBook = LoanBook::latest()->with(['user', 'book', 'returnBook'])->paginate(5);
-        $returnBook = ReturnBook::latest()->with(['user', 'book'])->paginate(5);
-        $user = User::count();
+        // Loan
+        $loanBook = LoanBook::latest()->with(['user', 'book']);
+        $loanBooks = $loanBook->paginate(5);
+        $loanCount = $loanBook->count();
+        $loanCountPerWeekly = $loanBook->where('loan_date', '>=', now()->startOfWeek())->where('loan_date', '<=', now()->endOfWeek())->count();
+
+        // Return
+        $returnBook = ReturnBook::latest()->with(['user', 'book']);
+        $returnBooks = $returnBook->paginate(5);
+        $returnCount = $returnBook->count();
+        $returnCountPerWeekly = $returnBook->where('return_date', '>=', now()->startOfWeek())->where('return_date', '<=', now()->endOfWeek())->count();
+
+        // User and Book
+        $user = User::where([
+            'user_role' => UserRole::USER->value,
+            'user_status' => UserStatus::ISACTIVE->value,
+        ])->count();
         $book = Book::count();
-        $loan = LoanBook::count();
-        $return = ReturnBook::count();
 
         return view('role-admin.dashboard.index', [
-            'dates' => $dates,
             'title' => 'Dashboard',
-            'loanData' => $loanData,
-            'returnData' => $returnData,
-            'loans' => $loanBook,
-            'returns' => $returnBook,
+            'dates' => array_values(collect($dates)->map(fn($d) => Carbon::parse($d)->format('d M'))->toArray()),
+            'loanData' => array_values($loanData),
+            'returnData' => array_values($returnData),
+            'loanBooks' => $loanBooks,
+            'loanCount' => $loanCount,
+            'loanCountPerWeekly' => $loanCountPerWeekly,
+            'returnBooks' => $returnBooks,
+            'returnCount' => $returnCount,
+            'returnCountPerWeekly' => $returnCountPerWeekly,
             'user' => $user,
             'book' => $book,
-            'loan' => $loan,
-            'return' => $return,
         ]);
     }
 
