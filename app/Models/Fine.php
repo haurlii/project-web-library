@@ -28,6 +28,12 @@ class Fine extends Model
         ];
     }
 
+    // Relasi Ke Model User
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // Relasi Ke Model ReturnBook
     public function returnBook(): BelongsTo
     {

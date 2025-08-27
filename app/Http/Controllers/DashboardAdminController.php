@@ -35,16 +35,14 @@ class DashboardAdminController extends Controller
         )->toArray();
 
         // Loan
-        $loanBook = LoanBook::latest()->with(['user', 'book']);
-        $loanBooks = $loanBook->paginate(5);
-        $loanCount = $loanBook->count();
-        $loanCountPerWeekly = $loanBook->where('loan_date', '>=', now()->startOfWeek())->where('loan_date', '<=', now()->endOfWeek())->count();
+        $loanBooks = LoanBook::latest()->with(['user', 'book'])->paginate(5);
+        $loanCount = LoanBook::count();
+        $loanCountPerWeekly = LoanBook::where('loan_date', '>=', now()->startOfWeek())->where('loan_date', '<=', now()->endOfWeek())->count();
 
         // Return
-        $returnBook = ReturnBook::latest()->with(['user', 'book']);
-        $returnBooks = $returnBook->paginate(5);
-        $returnCount = $returnBook->count();
-        $returnCountPerWeekly = $returnBook->where('return_date', '>=', now()->startOfWeek())->where('return_date', '<=', now()->endOfWeek())->count();
+        $returnBooks = ReturnBook::latest()->with(['user', 'book'])->paginate(5);
+        $returnCount = ReturnBook::count();
+        $returnCountPerWeekly = ReturnBook::where('return_date', '>=', now()->startOfWeek())->where('return_date', '<=', now()->endOfWeek())->count();
 
         // User and Book
         $user = User::where([

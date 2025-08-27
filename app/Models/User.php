@@ -62,15 +62,21 @@ class User extends Authenticatable
         ];
     }
 
-    // // Relasi Ke Model LoanBook
-    // public function loanBooks(): HasMany
-    // {
-    //     return $this->hasMany(LoanBook::class);
-    // }
+    // Relasi Ke Model LoanBook
+    public function loanBooks(): HasMany
+    {
+        return $this->hasMany(LoanBook::class);
+    }
 
-    // // Relasi Ke Model ReturnBook
-    // public function returnBooks(): HasMany
-    // {
-    //     return $this->hasMany(ReturnBook::class);
-    // }
+    // Relasi Ke Model ReturnBook
+    public function returnBooks(): HasMany
+    {
+        return $this->hasMany(ReturnBook::class);
+    }
+
+    // Relasi Ke Model Fine
+    public function fines(): HasMany
+    {
+        return $this->hasMany(Fine::class, 'user_id');
+    }
 }

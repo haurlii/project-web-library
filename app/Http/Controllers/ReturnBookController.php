@@ -158,4 +158,17 @@ class ReturnBookController extends Controller
 
         return Redirect::route('admin.return-books.index')->with(['message' => 'Berhasil mengembalikan buku']);
     }
+
+    public function fineUpdate(Request $request, Fine $fine)
+    {
+        $request->validate([
+            'return_book_id' => 'required|integer|exists:return_books,id'
+        ]);
+
+        $fine->update([
+            'payment_status' => FinePaymentStatus::SUCCESS->value,
+        ]);
+
+        return Redirect::route('admin.return-books.index')->with(['message' => 'Berhasil membayar denda']);
+    }
 }

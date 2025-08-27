@@ -33,10 +33,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', 'index')->name('admin.dashboard');
     });
 
+    // Upload avatar, cover, dan logo
     Route::controller(UploadController::class)->group(function () {
         Route::post('/dashboard/upload-avatar', [UploadController::class, 'uploadAvatar'])->name('admin.upload.avatar');
         Route::post('/dashboard/upload-cover', [UploadController::class, 'uploadCover'])->name('admin.upload.cover');
         Route::post('/dashboard/upload-logo', [UploadController::class, 'uploadLogo'])->name('admin.upload.logo');
+    });
+
+    // Laporan denda
+    Route::controller(FineController::class)->group(function () {
+        Route::get('/dashboard/fines', 'index')->name('admin.fines.index');
+        Route::post('/dashboard/fines', 'store')->name('admin.fines.store');
+        Route::patch('/dashboard/fines/{fine}', 'update')->name('admin.fines.update');
     });
 
     // Penulis buku
@@ -88,6 +96,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard/return-books', 'index')->name('admin.return-books.index');
         Route::get('/dashboard/loan-books/{loan_book}', 'getLoanBook')->name('admin.loan-books.getLoanBook');
         Route::post('/dashboard/return-books', 'store')->name('admin.return-books.store');
+        Route::patch('/dashboard/return-books/{fine}', 'fineUpdate')->name('admin.fines.fineUpdate');
     });
 
     // Cek pengembalian buku
@@ -108,10 +117,6 @@ Route::middleware('auth')->group(function () {
         // Profile user
         Route::get('/profiles', 'editUser')->name('user.profiles');
         Route::patch('/profiles', 'updateUser')->name('user.profiles.update');
-    });
-
-    Route::controller(FineController::class)->group(function () {
-        Route::patch('/dashboard/fines/{fine}', 'update')->name('admin.fines.update');
     });
 
     // Pengaturan denda
